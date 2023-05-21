@@ -1,0 +1,17 @@
+.slide-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow:scroll;
+}
+
+.section {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.header {
+    font-weight: bold;
+}

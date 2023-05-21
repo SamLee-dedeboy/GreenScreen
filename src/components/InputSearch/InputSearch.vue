@@ -26,7 +26,9 @@ function handleSearch(keyword: string) {
       v-model:value="search_keyword"
       placeholder="input search loading with enterButton"
       :loading="search_loading"
+      size="large"
       @search="handleSearch"
+      allowClear="true"
       enter-button
     />
 </template>

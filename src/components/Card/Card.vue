@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as vue from 'vue'
+import * as numeral from 'numeral'
 import { Ref, ref } from 'vue'
 
 const props = defineProps({
@@ -14,11 +15,26 @@ console.log(props.channel)
 </script>
 
 <template>
-    <a-card v-if="channel" class='channel-card' title="Card title" :bordered="false" >
-      <p class="card-content1"> {{ channel.subs }} </p>
-      <p class="card-content2"> {{ channel.videos }} </p>
-      <p class="card-content3"> {{ channel.carbon_emission }} </p>
-    </a-card>
+    <div v-if="channel" class='channel-card' >
+        <div class="channel-card-header">
+            <img class="channel-image" :src="'public/channel_images/' + channel.title + '.jpg'" />
+        </div>
+        <div class="channel-card-content">
+            <span class="card-title"> {{ channel.title }} </span>
+            <p class="card-content"> 
+                <span class="content-item-header"> Subs:  </span> 
+                {{ numeral(channel.subs).format('0,0') }} 
+            </p>
+            <p class="card-content">
+                <span class="content-item-header">  Videos:  </span> 
+                {{ channel.videos }} 
+            </p>
+            <p class="card-content"> 
+                <span class="content-item-header">  CEs:  </span> 
+                {{ channel.carbon_emission }} 
+                </p>
+            </div>
+        </div>
 </template>
 
 <style scoped>

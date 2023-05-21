@@ -7,5 +7,6 @@ import 'ant-design-vue/dist/antd.css';
 
 const app = createApp(App);
 
-app.use(Antd).mount('#app');
+app.use(Antd)
+app.mount('#app');
 

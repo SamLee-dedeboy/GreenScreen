@@ -12,11 +12,12 @@ function handleSearchResult(result: any) {
 </script>
 
 <template>
-    <div id="title"> Hello !</div>
-    <Card v-for="channel in recommend_channel"
-        :channel="channel"
-    />
     <InputSearch @search_completed="handleSearchResult" />
+    <div class="channels-container">
+        <Card v-for="channel in recommend_channel"
+            :channel="channel"
+        />
+    </div>
 </template>
 
 <style scoped>
