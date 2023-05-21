@@ -5,14 +5,14 @@ import SlideShow from './components/SlideShow/SlideShow.vue';
 
 <template>
   <div class="app-body">
-    <!-- <Home></Home> -->
     <SlideShow></SlideShow>
+    <Home></Home>
   </div>
 </template>
 
 <style scoped>
-/* .app-body {
+.app-body {
   width: 100vw;
   height: 100vh;
-} */
+}
 </style>

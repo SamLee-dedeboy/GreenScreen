@@ -16,11 +16,13 @@ async function handleSearchResult(channel_url: any) {
 </script>
 
 <template>
-    <InputSearch @search_completed="handleSearchResult" />
-    <div class="channels-container">
-        <Card v-for="channel in recommend_channel"
-            :channel="channel"
-        />
+    <div class="home-container">
+        <InputSearch @search_completed="handleSearchResult" />
+        <div class="channels-container">
+            <Card v-for="channel in recommend_channel"
+                :channel="channel"
+            />
+        </div>
     </div>
 </template>
 
