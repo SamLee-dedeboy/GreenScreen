@@ -33,8 +33,8 @@ console.log(props.channel)
                 {{ channel.videos }} 
             </p>
             <p class="card-content"> 
-                <span class="content-item-header">  CEs:  </span> 
-                {{ carbon_emission || "Click to find out" }} 
+                <span class="content-item-header">  Carbon Emissions:  </span> 
+                {{ carbon_emission / 0.072 || "Click to find out" }} 
                 </p>
             </div>
         </div>
