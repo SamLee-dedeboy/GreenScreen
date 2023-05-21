@@ -7,6 +7,9 @@ const props = defineProps({
   channel: {
     type: Object,
     required: true
+  },
+  carbon_emission: {
+    type: Number,
   }
 })
 
@@ -31,7 +34,7 @@ console.log(props.channel)
             </p>
             <p class="card-content"> 
                 <span class="content-item-header">  CEs:  </span> 
-                {{ channel.carbon_emission }} 
+                {{ carbon_emission || "Click to find out" }} 
                 </p>
             </div>
         </div>

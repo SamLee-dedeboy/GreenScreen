@@ -7,17 +7,35 @@ const search_keyword = ref('')
 const search_loading = ref(false)
 
 
-function handleSearch(keyword: string) {
+const server_address = 'http://127.0.0.1:5000'
+async function handleSearch(channel_url: string) {
     search_loading.value = true
-    console.log(keyword)
-    const result = {
-        "some result": "blaablabla"
-    }
-    setTimeout(() => {
+    await fetch(`${server_address}/channel`,
+    {
+      method: "POST",
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(channel_url)
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log({json})
+        console.log("channel data fetched", json)
         search_loading.value = false
-    }, 1000)
-    emit("search_completed", result)
+        emit("search_completed", json)
+      })
 }
+
+function search(channel_url) {
+    console.log("searching")
+    handleSearch(channel_url)
+}
+
+defineExpose({
+    search
+})
 
 </script>
 
