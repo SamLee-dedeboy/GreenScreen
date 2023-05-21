@@ -1,0 +1,12 @@
+#title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.channels-container {
+    display: flex;
+    margin-top: 3%;
+    flex-wrap: wrap;
+}
