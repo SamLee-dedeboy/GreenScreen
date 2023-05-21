@@ -7,7 +7,7 @@ const search_keyword = ref('')
 const search_loading = ref(false)
 
 
-const server_address = 'http://127.0.0.1:5000/'
+const server_address = 'http://127.0.0.1:5000'
 async function handleSearch(channel_url: string) {
     search_loading.value = true
     await fetch(`${server_address}/channel`,

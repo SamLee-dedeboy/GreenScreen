@@ -4,9 +4,10 @@ import InputSearch from '../InputSearch/InputSearch.vue';
 import recommend_channel from '../../assets/recommend_channel.json'
 import { Ref, ref } from 'vue'
 
+const carbon_emissions = ref({})
 const input_search = ref()
 function handleSearchResult(result: any) {
-    console.log(result)
+    carbon_emissions[result.title] = result.carbon_emission
 }
 
 function handleCardClick(channel_url: string) {
@@ -22,6 +23,7 @@ function handleCardClick(channel_url: string) {
             <Card v-for="channel in recommend_channel"
                 :channel="channel"
                 @click="handleCardClick(channel.url)"
+                :carbon_emission="carbon_emissions[channel.title]"
             />
         </div>
     </div>

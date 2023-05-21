@@ -1,2 +1,5 @@
 .slideshow-container {
 }
+.header .content .img {
+    transition: opacity 1s ease-in-out;
+}
