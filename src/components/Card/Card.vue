@@ -29,10 +29,10 @@ console.log(props.channel)
                 <span class="content-item-header">  Videos:  </span> 
                 {{ channel.videos }} 
             </p>
-            <p class="card-content"> 
+            <!-- <p class="card-content"> 
                 <span class="content-item-header">  CEs:  </span> 
                 {{ channel.carbon_emission }} 
-                </p>
+                </p> -->
             </div>
         </div>
 </template>

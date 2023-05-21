@@ -1,7 +1,72 @@
 import json
 import requests 
 from pprint import pprint
-from get_channel_id import get_channel_id
+from pytube import Channel
+import re
+
+def extract_channel_name(url: str) -> str:
+    """Extract the ``channel_name`` or ``channel_id`` from a YouTube url.
+
+    This function supports the following patterns:
+
+    - :samp:`https://youtube.com/c/{channel_name}/*`
+    - :samp:`https://youtube.com/channel/{channel_id}/*
+    - :samp:`https://youtube.com/u/{channel_name}/*`
+    - :samp:`https://youtube.com/user/{channel_id}/*
+    - :samp:`https://youtube.com/@{channel_name}/*`
+
+    :param str url:
+        A YouTube url containing a channel name.
+    :rtype: str
+    :returns:
+        YouTube channel name.
+    """
+    patterns = [
+        r"(?:\/(c)\/([%\d\w_\-]+)(\/.*)?)",
+        r"(?:\/(channel)\/([%\w\d_\-]+)(\/.*)?)",
+        r"(?:\/(u)\/([%\d\w_\-]+)(\/.*)?)",
+        r"(?:\/(user)\/([%\w\d_\-]+)(\/.*)?)",
+        r"(?:(@[%\w\d_-]+)(.*)?)"
+    ]
+    for pattern in patterns:
+        regex = re.compile(pattern)
+        function_match = regex.search(url)
+        if function_match:
+            # logger.debug("finished regex search, matched: %s", pattern)
+            uri_style = function_match.group(1)
+            uri_identifier = function_match.group(2)
+            return uri_style, uri_identifier
+            # return f'{uri_style}{uri_identifier}'
+
+    # raise RegexMatchError(
+    #     caller="channel_name", pattern="patterns"
+    # )
+
+def get_channel_id(channel_url, API_KEY=None):
+    print(channel_url)
+    uri_style, channel_name = extract_channel_name(channel_url)
+    print(uri_style, channel_name)
+    if uri_style == 'channel':
+        return channel_name
+    elif uri_style.startswith('@'):
+        channel_name = uri_style[1:]
+    try:
+        channel_url = f'https://www.youtube.com/c/{channel_name}'
+        channel = Channel(channel_url)
+        print(channel_url)
+        print(channel.channel_id)
+        return channel.channel_id
+    except:
+        payload = {
+            'part': 'snippet', 
+            'forUsername': channel_name,
+            'key': API_KEY
+        }
+        r = json.loads(requests.get('https://youtube.googleapis.com/youtube/v3/channels', params=payload).content)
+        pprint(r)
+        print(r['items'][0]['id'])
+        return r['items'][0]['id']
+
 
 def get_channel_playlists(channel_id, API_KEY):
     payload = {
@@ -19,6 +84,7 @@ def get_channel_playlists(channel_id, API_KEY):
             payload['pageToken'] = nextPageToken
             r = json.loads(requests.get('https://youtube.googleapis.com/youtube/v3/playlists', params=payload).content)
             playlist_ids += list(map(lambda item: item['id'], r['items']))
+            if 'nextPageToken' not in r: break
             nextPageToken = r['nextPageToken']
 
     return playlist_ids
@@ -62,13 +128,17 @@ def get_video_data(video_ids, API_KEY):
         }
         r = json.loads(requests.get('https://youtube.googleapis.com/youtube/v3/videos', params=payload).content)
         chunk_durations = list(map(lambda item: item['contentDetails']['duration'], r['items']))
-        chunk_viewCounts = list(map(lambda item: item['statistics']['viewCount'], r['items']))
+        try:
+            chunk_viewCounts = list(map(lambda item: item['statistics']['viewCount'], r['items']))
+        except KeyError:
+            # sometimes viewCount is not included in statistics
+            chunk_viewCounts = []
         durations += chunk_durations
         viewCounts += chunk_viewCounts
     return durations, viewCounts
 
 def get_channel_video_data(channel_url, API_KEY):
-    channel_id = get_channel_id(channel_url)
+    channel_id = get_channel_id(channel_url, API_KEY)
     print(channel_id)
     playlist_ids = get_channel_playlists(channel_id, API_KEY)
     print("playlists: ", len(playlist_ids))
@@ -95,7 +165,7 @@ def calculate_carbon(channel_url, API_KEY):
 
     durations, viewCounts = get_channel_video_data(channel_url, API_KEY)
     carbon = 0
-    for i in range(len(durations)):
+    for i in range(min(len(durations), len(viewCounts))):
         duration = toHours(durations[i]) # duration in hours
         viewCount = int(viewCounts[i])
         carbon += duration * viewCount * 36 / 1000
@@ -103,6 +173,7 @@ def calculate_carbon(channel_url, API_KEY):
 
 if __name__ == "__main__":
     API_KEY = 'AIzaSyBHOx6RgnF3QyQqzt094BTijDo7j2SzoYA'
-    channel_url = 'https://www.youtube.com/@Fireship'
+    # channel_url = 'https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A'
+    channel_url = 'https://www.youtube.com/@Vox'
     carbon = calculate_carbon(channel_url, API_KEY)
     print(carbon)
