@@ -4,18 +4,22 @@
     flex-direction: column;
     justify-content: space-between;
     overflow:scroll;
-    background-color: white;
+    background-color: #d3f7a1;
 }
 
 .section {
     width: 100vw;
     height: 100vh;
-    display: flex;
     flex-direction: column;
 }
 .header {
+    font-size: 50px;
     font-weight: bold;
+    font-family: Impact, Haettenschweiler, 'Arial Bold', sans-serif;
 }
-.content {
-    font-family: Impact;
+
+
+img {
+    opacity: 0.6;
+    width: 100px;
 }
