@@ -5,18 +5,24 @@ import recommend_channel from '../../assets/recommend_channel.json'
 import { Ref, ref } from 'vue'
 
 
-
-function handleSearchResult(result: any) {
-    console.log(result)
+const server_address = 'localhost:5173'
+async function handleSearchResult(channel_url: any) {
+    await fetch(`${server_address}/channel/${channel_url}`)
+        .then(res => res.json())
+        .then(json => {
+            console.log("channel data fetched", json)
+        })
 }
 </script>
 
 <template>
-    <InputSearch @search_completed="handleSearchResult" />
-    <div class="channels-container">
-        <Card v-for="channel in recommend_channel"
-            :channel="channel"
-        />
+    <div class="home-container">
+        <InputSearch @search_completed="handleSearchResult" />
+        <div class="channels-container">
+            <Card v-for="channel in recommend_channel"
+                :channel="channel"
+            />
+        </div>
     </div>
 </template>
 
