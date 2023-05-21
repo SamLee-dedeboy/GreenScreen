@@ -7,6 +7,10 @@
     background-color: #d3f7a1;
 }
 
+.title {
+    font-size: 1000px;
+}
+
 .section {
     width: 100vw;
     height: 100vh;
